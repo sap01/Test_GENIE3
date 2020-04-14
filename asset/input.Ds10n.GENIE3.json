@@ -1,0 +1,7 @@
+{ 
+   "input.data.filename": "InSilicoSize10-Yeast1-trajectories.tsv",
+   "num.timepts": 21,
+   "num.time.series": 4,
+   "info.sharing.prior": "bino_hard",
+   "num.iters": 10000
+}
