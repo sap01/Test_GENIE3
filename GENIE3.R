@@ -1,6 +1,7 @@
 #!/usr/bin/env Rscript
-## Goal of this program: Apply the TVDBN methods available in package 'EDISON' [1, 2].
-## on the given datasets.
+#' Test R package 'GENIE3'
+#' 
+#' 
 ##
 ##
 ## The coding practices followed are documented at:
@@ -59,64 +60,64 @@ library(GENIE3)
 ##------------------------------------------------------------
 ## Begin: Read User-defined input Params
 ##------------------------------------------------------------
-init.path <- base::getwd()
+init_path <- base::getwd()
 
-input.args <- base::commandArgs(trailingOnly = TRUE)
+input_args <- base::commandArgs(trailingOnly = TRUE)
 
 if (base::length(args) != 1)
 {
   base::stop("Exactly one input file must be supplied.", call. = FALSE)
 }
 
-input.params <-
-  rjson::fromJSON(file = paste(init.path, 
+input_params <-
+  rjson::fromJSON(file = paste(init_path, 
                                'asset', 
-                               input.args, 
+                               input_args, 
                                sep = '/'))
-base::rm(input.args)
+base::rm(input_args)
 
 ## Input file for time-series gene expression data
-input.data.filename <- input.params$input.data.filename
-input.data.filename <- paste(init.path, 
+input_data_filename <- input_params$input_data_filename
+input_data_filename <- paste(init_path, 
                              'asset', 
-                             input.data.filename, 
+                             input_data_filename, 
                              sep = '/')
 
 ## Number of time points (T)
-num.timepts <- input.params$num.timepts
+num_timepts <- input_params$num_timepts
 
 ## Number of time series (S)
-num.time.series <- input.params$num.time.series
+num_time_series <- input_params$num_time_series
 
 ## Please see argument 'regulators' of
 ## GENIE3::GENIE3().
-regulators <- input.params$regulators
+regulators <- input_params$regulators
 
 ## Please see argument 'targets' of
 ## GENIE3::GENIE3().
-targets <- input.params$targets
+targets <- input_params$targets
 
 ## Please see argument 'treeMethod' of
 ## GENIE3::GENIE3().
-treeMethod <- input.params$treeMethod
+treeMethod <- input_params$treeMethod
 
 ## Please see argument 'K' of
 ## GENIE3::GENIE3().
-K <- input.params$K
+K <- input_params$K
 
 ## Please see argument 'nTrees' of
 ## GENIE3::GENIE3().
-nTrees <- input.params$nTrees
+nTrees <- input_params$nTrees
 
 ## Please see argument 'nCores' of
 ## GENIE3::GENIE3().
-nCores <- input.params$nCores
+nCores <- input_params$nCores
 
 ## Please see argument 'verbose' of
 ## GENIE3::GENIE3().
-verbose <- input.params$verbose
+verbose <- input_params$verbose
 
-base::rm(input.params)
+base::rm(input_params)
 ##------------------------------------------------------------
 ## End: Read User-defined input Params
 ##------------------------------------------------------------
@@ -126,35 +127,35 @@ base::rm(input.params)
 ##------------------------------------------------------------
 
 ## Output directory name
-output.dirname <- base::paste('output', 
-                              format(Sys.time(), 
+output_dirname <- base::paste('output', 
+                              format(base::Sys.time(), 
                                      "%Y%m%d%H%M%S"), 
                               sep = '')
 
 if (base::.Platform$OS.type == 'windows') {
-  if (!output.dirname %in% base::shell("ls asset" , intern = TRUE)) {
+  if (!output_dirname %in% base::shell("ls asset" , intern = TRUE)) {
     ## Output directory name for Windows OSes
-    output.dirname <- base::paste('asset', output.dirname, sep = '/')
-    output.dirname <- base::paste(init.path, output.dirname, sep = '/')
+    output_dirname <- base::paste('asset', output_dirname, sep = '/')
+    output_dirname <- base::paste(init_path, output_dirname, sep = '/')
     
     ## Convert directory path to canonical form for the Windows OS.
     ## It raises the warning if the directory does not exist, which
     ## is expected. Therefore, please ignore the warning.
-    output.dirname <- base::normalizePath(output.dirname, 
+    output_dirname <- base::normalizePath(output_dirname, 
                                           winslash = '\\', 
                                           mustWork = NA)
     
-    base::shell(paste('mkdir ', output.dirname, sep = ''),
+    base::shell(paste('mkdir ', output_dirname, sep = ''),
                 intern = TRUE,
                 mustWork = TRUE)
   }
 } else {
   if (base::.Platform$OS.type == 'unix') {
-    if (!output.dirname %in% base::system("ls asset" , intern = TRUE)) {
-      output.dirname <- base::paste('asset', output.dirname, sep = '/')
-      output.dirname <- base::paste(init.path, output.dirname, sep = '/')
+    if (!output_dirname %in% base::system("ls asset" , intern = TRUE)) {
+      output_dirname <- base::paste('asset', output_dirname, sep = '/')
+      output_dirname <- base::paste(init_path, output_dirname, sep = '/')
       
-      base::system(paste('mkdir ', output.dirname, sep = ''))
+      base::system(paste('mkdir ', output_dirname, sep = ''))
     }
   }
 }
@@ -176,13 +177,13 @@ if (base::.Platform$OS.type == 'windows') {
 
 ## Print the output dir name in 'nohup.out'
 base::print('The output directory name is:')
-base::print(output.dirname)
+base::print(output_dirname)
 base::print('') ## to append a blank line
 
 ## Save console output in a file named 'output.txt' inside the output directory.
-output.filename <- base::paste(output.dirname, 'output.txt', sep = '/')
-output.file.conn <- base::file(output.filename, open = "wt")
-base::sink(output.file.conn)
+output_filename <- base::paste(output_dirname, 'output.txt', sep = '/')
+output_file_conn <- base::file(output_filename, open = "wt")
+base::sink(output_file_conn)
 
 ##------------------------------------------------------------
 ## Begin: Read input data file
@@ -192,64 +193,64 @@ base::sink(output.file.conn)
 ## are allowed.
 ## Split the string at every '.' and consider the last substring as the
 ## file extension.
-input.data.filename.ext <-
-  base::unlist(strsplit(input.data.filename, '[.]'))
+input_data_filename_ext <-
+  base::unlist(strsplit(input_data_filename, '[.]'))
 ## End: Find file extension of the input data file. Only '.tsv' and '.RData'
 ## are allowed.
 
-input.data <- NULL
+input_data <- NULL
 
-if (input.data.filename.ext[length(input.data.filename.ext)] == 'tsv') {
-  input.data <-
-    utils::read.table(input.data.filename, header = TRUE, sep = "\t")
+if (input_data_filename_ext[length(input_data_filename_ext)] == 'tsv') {
+  input_data <-
+    utils::read.table(input_data_filename, header = TRUE, sep = "\t")
   
   ## Remove first col i.e. the time point names
-  input.data <- input.data[,-1]
+  input_data <- input_data[,-1]
   
-} else if (input.data.filename.ext[length(input.data.filename.ext)] == 'RData') {
-  ## Loads an object named 'input.data'
-  base::load(input.data.filename)
+} else if (input_data_filename_ext[length(input_data_filename_ext)] == 'RData') {
+  ## Loads an object named 'input_data'
+  base::load(input_data_filename)
 }
 
-num.nodes <- base::ncol(input.data)
+num_nodes <- base::ncol(input_data)
 ##------------------------------------------------------------
 ## End: Read input data
 ##------------------------------------------------------------
 
 ##------------------------------------------------------------
-## Begin: Learn the EDISON model
+## Begin: Learn the GENIE3 model
 ##------------------------------------------------------------
 
 ## start the timer
-start.time <- base::proc.time()
+start_time <- base::proc.time()
 
-node.names <- base::colnames(input.data)
+node_names <- base::colnames(input_data)
 
 ## Input data is required to be a matrix where rows = nodes and
 ## cols = samples.
 ## Please see input param 'exprMatrix' of GENIE3::GENIE3().
-input.data <- base::t(input.data)
+input_data <- base::t(input_data)
 
 ## Initialize weighted adjacency matrix of the
 ## to-be-reconstructed directed net
-di.net.adj.matrix.wt <- NULL
+di_net_adj_matrix_wt <- NULL
 
 ## Apply GENIE3 on one time series at a time
-for (time.series.idx in 1:num.time.series) {
+for (time_series_idx in 1:num_time_series) {
   ## Input data of the current time series
-  input.data.curr.series <- input.data[, 1:num.timepts]
+  input_data_curr_series <- input_data[, 1:num_timepts]
   
   ## Remaining input data
-  input.data <- input.data[,-(1:num.timepts)]
+  input_data <- input_data[,-(1:num_timepts)]
   
   ## Make results reproducibile
   base::set.seed(seed = 123)
   
   ## Run GENIE3 on the current time series to
   ## reconstruct weighted adjacency matrix of 
-  ## the directed net.
-  di.net.adj.matrix.wt.curr.series <- 
-    GENIE3::GENIE3(exprMatrix = input.data.curr.series, 
+  ## the directed net
+  di_net_adj_matrix_wt_curr_series <- 
+    GENIE3::GENIE3(exprMatrix = input_data_curr_series, 
                    regulators = regulators, 
                    targets = targets, 
                    treeMethod = treeMethod, 
@@ -258,48 +259,59 @@ for (time.series.idx in 1:num.time.series) {
                    nCores = nCores, 
                    verbose = verbose)
   
-  base::save(
-    net.adj.mx.wt,
-    file = paste(output.dirname,
-                 '/GENIE3.result',
-                 time.series.idx,
-                 '.RData',
-                 sep = ''))
+  ## Sum time-series-spedific adjacency matrices
+  if (time_series_idx == 1) {
+    di_net_adj_matrix_wt <- 
+      di_net_adj_matrix_wt_curr_series
+  } else {
+    di_net_adj_matrix_wt <- 
+      base::sum(di_net_adj_matrix_wt, 
+                di_net_adj_matrix_wt_curr_series)
+  }
   
-  base::rm(input.data.curr.series)
+  base::rm(input_data_curr_series, 
+           di_net_adj_matrix_wt_curr_series)
   
   
-  base::rm(net.adj.mx.wt)
+  base::rm(net_adj_mx_wt)
   
   base::print(paste('Series', 
-                    time.series.idx, 
+                    time_series_idx, 
                     'is completed.', 
                     sep = ' '))
   
 }
-base::rm(time.series.idx)
+base::rm(time_series_idx)
+
+base::save(
+  di_net_adj_matrix_wt,
+  file = paste(output_dirname,
+               '/di_net_adj_matrix_wt',
+               '.RData',
+               sep = ''))
+
 ##------------------------------------------------------------
-## End: Learn the EDISON model
+## End: Learn the GENIE3 model
 ##------------------------------------------------------------
 
 ## Stop the timer
-elapsed.time <- (base::proc.time() - start.time)
-base::writeLines('elapsed.time = \n')
-base::print(elapsed.time)
+elapsed_time <- (base::proc.time() - start_time)
+base::writeLines('elapsed_time = \n')
+base::print(elapsed_time)
 
-## Close output to the 'console_output.txt'
+## Close output to 'output.txt'
 base::sink()
-base::close(output.file.conn)
+base::close(output_file_conn)
 
 ## Save R session info in a file named 'sessionInfo.txt' inside the output directory.
-output.filename <-
-  base::paste(output.dirname, 'sessionInfo.txt', sep = '/')
-output.file.conn <- base::file(output.filename, open = "wt")
-base::rm(output.filename)
-base::sink(output.file.conn)
+output_filename <-
+  base::paste(output_dirname, 'sessionInfo.txt', sep = '/')
+output_file_conn <- base::file(output_filename, open = "wt")
+base::rm(output_filename)
+base::sink(output_file_conn)
 utils::sessionInfo()
 base::sink()
-base::close(output.file.conn)
+base::close(output_file_conn)
 ##------------------------------------------------------------
 ## End: Main Program
 ##------------------------------------------------------------
