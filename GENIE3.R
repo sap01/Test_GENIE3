@@ -1,48 +1,52 @@
 #!/usr/bin/env Rscript
 #' Test R package 'GENIE3'
 #' 
+#' Test R package 'GENIE3' on various datasets
 #' 
-##
-##
-## The coding practices followed are documented at:
-## https://github.com/sap01/coding_practices/blob/master/R_coding_practices.md
-##
-## Begin: References
-## 1. Dondelinger, Frank, Sophie L?bre, and Dirk Husmeier. "Non-homogeneous
-## dynamic Bayesian networks with Bayesian regularization for inferring
-## gene regulatory networks with gradually time-varying structure."
-## Machine Learning 90.2 (2013): 191-230.
-##
-## 2. The 'EDISON' package in R: https://CRAN.R-project.org/package=EDISON
-## End: References
-##
-## Usage:
-## For Unix-alike OSes:
-## Let us assume that this script is inside directory
-## '/home/saptarshi/R/R-3.3.2/projects/repoedisonr' and
-## the Rscript file is inside directory '/home/saptarshi/R/R-3.3.2/bin'.
-## Then, execute this script using the following commands (the '$' symbol
-## represents the Bash command prompt):
-## $ cd /home/saptarshi/R/R-3.3.2/projects/repoedisonr/
-## $ nohup time /home/saptarshi/R/R-3.3.2/bin/Rscript /home/saptarshi/R/R-3.3.2/projects/repoedisonr/EDISON.R input.json &
-## where '/repoedisonr/asset/input.json' contains the user-defined parameters. A file
-## named 'nohup.out' will be generated inside
-## '/home/saptarshi/R/R-3.3.2/projects/repoedisonr/'.
-##
-## For Windows OSes:
-## Let us assume that this script is inside directory 'D:\R\R-3.3.2\projects\repoedisonr' and
-## the 'Rscript.exe' file is inside directory 'C:\Program Files\R\R-3.3.1\bin'.
-## Then, execute this script using the following commands (the '>' symbol
-## represents the DOS command prompt):
-## >cd "D:\R\R-3.3.2\projects\repoedisonr"
-## >"C:\Program Files\R\R-3.3.1\bin\Rscript.exe" EDISON.R input.json
-## where '/repoedisonr/asset/input.json' contains the user-defined parameters.
-##
-## Input: A time series gene expression dataset with multiple time series.
-## TODO (sap)
-##
-## Output: Time-varying Gene Regulatory Networks and a corresponding rolled up network.
-##
+#' @section Coding style:
+#' \url{https://github.com/sap01/coding_practices/blob/master/R_coding_practices.md}
+#' 
+#' @section Usage for Unix-alike OSes:
+#' Let us assume that this script is inside directory
+#' '/home/username/R/R-x.y.z/projects/Test_GENIE3' and
+#' the Rscript file is inside directory 
+#' '/home/username/R/R-x.y.z/bin'.
+#' Then, execute this script using the following commands 
+#' (the '$' symbol represents the Bash command prompt):
+#' $ cd /home/username/R/R-x.y.z/projects/Test_GENIE3/
+#' $ nohup time -v /home/username/R/R-x.y.z/bin/Rscript 
+#' /home/username/R/R-x.y.z/projects/Test_GENIE3/GENIE3.R 
+#' input.json &
+#' 
+#' where '/Test_GENIE3/asset/input.json' contains the user-defined 
+#' parameters. A file named 'nohup.out' will be generated inside
+#' '/home/username/R/R-x.y.z/projects/Test_GENIE3/'.
+#'
+#' @section Usage for Windows OSes:
+#' Let us assume that this script is inside directory 
+#' 'D:\R\R-x.y.z\projects\Test_GENIE3' and
+#' the 'Rscript.exe' file is inside directory 
+#' 'C:\Program Files\R\R-x.y.z\bin'.
+#' Then, execute this script using the following commands 
+#' (the '>' symbol represents the DOS command prompt):
+#' >cd "D:\R\R-x.y.z\projects\Test_GENIE3"
+#' >"C:\Program Files\R\R-x.y.z\bin\Rscript.exe" 
+#' GENIE3.R input.json
+#' 
+#' where '/Test_GENIE3/asset/input.json' contains the user-defined 
+#' parameters.
+#'
+#' @param input_args Name of a JSON file that contains the 
+#' parameter values for \code{GENIE3::GENIE3()}. The file
+#' must be stored inside the 'asset' sub-directory.
+#' 
+#' @return R object 'di_net_adj_matrix_wt'. This is the
+#' adjacency matrix of the directed network reconstructed
+#' with GENIE3 from the input data. If an input data has
+#' multiple time series, then GENIE3 reconstructs one 
+#' adjacency matrix from each time series; consequently, 
+#' all matrices are added to reconstruct the final matrix.
+#'
 ## Remove all objects in the current workspace
 rm(list = ls())
 
