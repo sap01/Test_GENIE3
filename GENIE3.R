@@ -269,8 +269,8 @@ for (time_series_idx in 1:num_time_series) {
       di_net_adj_matrix_wt_curr_series
   } else {
     di_net_adj_matrix_wt <- 
-      base::sum(di_net_adj_matrix_wt, 
-                di_net_adj_matrix_wt_curr_series)
+      (di_net_adj_matrix_wt +
+         di_net_adj_matrix_wt_curr_series)
   }
   
   base::rm(input_data_curr_series, 

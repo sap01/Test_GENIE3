@@ -1,7 +1,12 @@
 { 
-   "input.data.filename": "InSilicoSize10-Yeast1-trajectories.tsv",
-   "num.timepts": 21,
-   "num.time.series": 4,
-   "info.sharing.prior": "bino_hard",
-   "num.iters": 10000
+   "input_data_filename": "InSilicoSize10-Yeast1-trajectories.tsv",
+   "num_timepts": 21,
+   "num_time_series": 4,
+   "regulators": null,
+   "targets": null,
+   "treeMethod": "RF",
+   "K": "all",
+   "nTrees": 1000,
+   "nCores": 1,
+   "verbose": false
 }
