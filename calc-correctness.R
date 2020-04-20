@@ -11,6 +11,9 @@ NULL
 #' 
 #' @param pred_net_adj_list Adjaceny list of the predicted
 #' directed network.
+#' > di_net_adj_list[1, ]
+# regulatoryGene targetGene   weight
+# 1             G3        G10 1.132096
 #' 
 #' @param true_net_adj_mx Adjacency matrix of the true
 #' directed network.
@@ -43,10 +46,6 @@ CalcCorrectnessNetPredDiListVsTrueDiMx <-function(
     } else {
       fl_pos <- (fl_pos + 1)
     }
-    
-    # > di_net_adj_list[1, ]
-    # regulatoryGene targetGene   weight
-    # 1             G3        G10 1.132096
   }
   base::rm(node_idx)
   
