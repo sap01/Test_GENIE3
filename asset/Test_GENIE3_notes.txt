@@ -1,0 +1,13 @@
+"C:\Program Files\R\R-3.5.1\bin\Rscript.exe" GENIE3.R input.Ds10n.GENIE3.json
+
+source('calc_correctness.R')
+
+di_net_adj_list <- GENIE3::getLinkList(di_net_adj_matrix_wt, reportMax = 4, threshold = 0)
+base::save(di_net_adj_list, file = 'asset/output20200416200349/di_net_adj_list_top4.RData')
+correctness <- CalcCorrectnessNetPredDiListVsTrueDiMx(di_net_adj_list, true.net.adj.matrix, print_tr_pos = TRUE)
+base::save(correctness, file = 'asset/output20200416200349/correctness_top4.RData')
+
+di_net_adj_list <- GENIE3::getLinkList(di_net_adj_matrix_wt, reportMax = 13, threshold = 0)
+base::save(di_net_adj_list, file = 'asset/output20200416200349/di_net_adj_list_top13.RData')
+correctness <- CalcCorrectnessNetPredDiListVsTrueDiMx(di_net_adj_list, true.net.adj.matrix, print_tr_pos = TRUE)
+base::save(correctness, file = 'asset/output20200416200349/correctness_top13.RData')

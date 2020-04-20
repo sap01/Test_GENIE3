@@ -22,6 +22,10 @@ NULL
 #' @param true_net_adj_mx Adjacency matrix of the true
 #' directed network. 1 = edge, 0 = no edge.
 #' 
+#' @param print_tr_pos Logical. TRUE = print true
+#' positive edges in console, e.g. 'G1 -> G2'. 
+#' FALSE (default) = do not print. 
+#' 
 #' @return R object 'correctness'. It is a 1-by-11 matrix.
 #'   The column names represent the correctness 
 #'   metrics: 'TP', 'TN', 'FP', 'FN', 'TPR', 'FPR',
@@ -30,7 +34,8 @@ NULL
 #' 
 CalcCorrectnessNetPredDiListVsTrueDiMx <-function(
   pred_net_adj_list, 
-  true_net_adj_mx) {
+  true_net_adj_mx,
+  print_tr_pos = FALSE) {
   
   tr_pos <- 0
   tr_neg <- 0
@@ -42,13 +47,23 @@ CalcCorrectnessNetPredDiListVsTrueDiMx <-function(
   
   for (edge_idx in 1:num_pred_edges) {
     src_node <- 
-      pred_net_adj_list[edge_idx, ]$regulatoryGene
+      base::as.character(
+        pred_net_adj_list[edge_idx, ]$regulatoryGene)
     
     tgt_node <- 
-      pred_net_adj_list[edge_idx, ]$targetGene
+      base::as.character(
+        pred_net_adj_list[edge_idx, ]$targetGene)
     
     if (true_net_adj_mx[src_node, tgt_node] == 1) {
       tr_pos <- (tr_pos + 1)
+      
+      if (print_tr_pos == TRUE) {
+        base::print(
+          base::paste(src_node,
+                      '->',
+                      tgt_node,
+                      sep = ' '))
+      }
     } else {
       fl_pos <- (fl_pos + 1)
     }
