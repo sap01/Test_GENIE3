@@ -1,0 +1,12 @@
+{ 
+   "input_data_filename": "InSilicoSize50-Yeast1-trajectories.tsv",
+   "num_timepts": 21,
+   "num_time_series": 23,
+   "regulators": null,
+   "targets": null,
+   "treeMethod": "RF",
+   "K": "all",
+   "nTrees": 1000,
+   "nCores": 1,
+   "verbose": false
+}
